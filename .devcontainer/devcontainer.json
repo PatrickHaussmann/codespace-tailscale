@@ -1,11 +1,12 @@
+
 {
     "name": "Tailscale-enabled Codespace",
     "dockerFile": "Dockerfile",
     "context": "..",
     "runArgs": [ "--cap-add=NET_ADMIN", "--cap-add=NET_RAW", "--device=/dev/net/tun" ],
-    "postStartCommand": "/etc/init.d/tailscaled start",
-        
+    "postStartCommand": "sudo /etc/init.d/tailscaled start",
     "settings": {
-        "dotfiles.repository": "invalid-dotfiles-repo-id" // disable dotfiles install
+        "dotfiles.repository": "https://git.sr.ht/~patrickhaussmann/dotfiles"
     }
 }
+

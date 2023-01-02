@@ -1,9 +1,6 @@
-# Copyright (c) 2021 Tailscale Inc & AUTHORS All rights reserved.
-# Use of this source code is governed by a BSD-style
-# license that can be found in the LICENSE file.
-
-FROM mcr.microsoft.com/vscode/devcontainers/universal:linux as builder
+FROM ubuntu as builder
 USER root
+RUN apt-get update && apt-get install -y wget
 WORKDIR /app
 COPY . ./
 ENV TSFILE=tailscale_1.26.1_amd64.tgz
@@ -12,10 +9,10 @@ RUN mkdir -p binaries && \
   tar xzf ${TSFILE} --strip-components=1 -C binaries
 COPY . ./
 
-FROM mcr.microsoft.com/vscode/devcontainers/universal:linux
+FROM mcr.microsoft.com/vscode/devcontainers/universal:linux 
 USER root
 
-RUN apt-get update && apt-get install -y curl gpg dnsutils
+RUN apt-get update && apt-get install -y curl gpg dnsutils sudo
 COPY tailscaled /etc/init.d/tailscaled
 RUN chmod +x /etc/init.d/tailscaled
 COPY --from=builder /app/binaries/tailscaled /usr/sbin/tailscaled
